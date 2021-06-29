@@ -9,17 +9,18 @@ import DAO.CiudadDAO;
 import Entidad.Ciudad;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.NonUniqueResultException;
+import javax.persistence.Persistence;
+import javax.persistence.Query;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author PC
- */
-public class CiudadFront extends javax.swing.JFrame {
 
-    /**
-     * Creates new form CiudadFront
-     */
+
+public class CiudadFront extends javax.swing.JFrame {
+ private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("AplicaPU");
+ 
     public CiudadFront() {
       super("Centrar JFrame");	
       Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
@@ -31,22 +32,43 @@ public class CiudadFront extends javax.swing.JFrame {
       setVisible(true);
      
         initComponents();
-        MostrarTabla();
+        
+        ConsultaDatos();
     }
 
-    //====================================
-    //Muestras Columnas en la tabla
+   
+   
+   //====================================
+    //Consulta datos DB y muestra en la tabla
     //====================================
     
-   void MostrarTabla(){
+   
+   void ConsultaDatos(){
        DefaultTableModel model = new DefaultTableModel();
        model.addColumn("ID");
        model.addColumn("NOMBRE");
+       model.addColumn("CANTIDAD HABITANTES");
        model.addColumn("SITIO TURISTICO");
        model.addColumn("HOTEL RESERVADO");
        TablaCiudades.setModel(model);
-       
+        EntityManager em = emf.createEntityManager();
+        Ciudad ciudad = null;
+        Query q = em.createQuery("SELECT u FROM Ciudad u" );
+        
+        String[] datos = new String[5];
+        for (int i = 0; i < q.getResultList().size(); i++) {
+                ciudad = (Ciudad) q.getResultList().get(i);
+                datos[0] = String.valueOf(ciudad.getId_ciudad());
+                datos[2] = String.valueOf(ciudad.getCantidad_habitantes());
+                datos[1] = ciudad.getNombre_ciudad();
+                datos[3] = ciudad.getHotel_reservado();
+                datos[4] = ciudad.getSitio_turístico();
+                model.addRow(datos);      
+       }
+        TablaCiudades.setModel(model);
+
    }
+   
     
     
     @SuppressWarnings("unchecked")
@@ -128,8 +150,18 @@ public class CiudadFront extends javax.swing.JFrame {
         });
 
         Actualizar.setText("Actualizar");
+        Actualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ActualizarActionPerformed(evt);
+            }
+        });
 
         Eliminar.setText("Eliminar");
+        Eliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EliminarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -247,6 +279,7 @@ public class CiudadFront extends javax.swing.JFrame {
        ciudad.setHotel_reservado(tex_hotelreservado.getText());
        ciudad.setSitio_turístico(tex_sitioturistico.getText());
        dao.crear(ciudad);
+       ConsultaDatos();
        
     }//GEN-LAST:event_AgregarActionPerformed
 
@@ -261,12 +294,37 @@ public class CiudadFront extends javax.swing.JFrame {
         tex_cant_hitantes.setText(String.valueOf(ciudad2.getCantidad_habitantes()));
         tex_hotelreservado.setText(ciudad2.getHotel_reservado());
         tex_sitioturistico.setText(ciudad2.getSitio_turístico());
+        ConsultaDatos();
         
     }//GEN-LAST:event_BuscarActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
+    private void EliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EliminarActionPerformed
+        Ciudad ciudad = new Ciudad();
+        Ciudad ciudad2 = new Ciudad();
+        CiudadDAO dao = new CiudadDAO();
+        
+        ciudad.setNombre_ciudad(tex_nombreciudad.getText());
+        ciudad2 = dao.Buscar(ciudad);
+        dao.eliminar(ciudad2);
+        ConsultaDatos();
+    }//GEN-LAST:event_EliminarActionPerformed
+
+    private void ActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ActualizarActionPerformed
+        Ciudad ciudad = new Ciudad();
+        Ciudad ciudad2 = new Ciudad();
+        CiudadDAO dao = new CiudadDAO();
+        ciudad.setNombre_ciudad(tex_nombreciudad.getText());
+        ciudad2 = dao.Buscar(ciudad);
+        ciudad2.setNombre_ciudad(tex_nombreciudad.getText());
+        ciudad2.setCantidad_habitantes(Integer.valueOf(tex_cant_hitantes.getText()));
+        ciudad2.setHotel_reservado(tex_hotelreservado.getText());
+        ciudad2.setSitio_turístico(tex_sitioturistico.getText());
+
+        dao.actualizar(ciudad, ciudad2);
+        ConsultaDatos();
+    }//GEN-LAST:event_ActualizarActionPerformed
+
+   
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

@@ -33,7 +33,8 @@ public class CiudadDAO {
         em.getTransaction().begin();
         boolean ret = false;
         try {
-            em.remove(object);
+            Ciudad current = em.merge(object);
+            em.remove(current);
             em.getTransaction().commit();
             ret = true;
         } catch (Exception e) {
@@ -61,15 +62,19 @@ public class CiudadDAO {
             return ciudad;
         }
     }
-/*
+
     public boolean actualizar(Ciudad object, Ciudad nuevoObjeto) {
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
         boolean ret = false;
         try {
-            object = leer(object);
-            object.setNombre(nuevoObjeto.getNombre());
-            object.setPassword(nuevoObjeto.getPassword());
+            object = Buscar(object);
+            object.setId_ciudad(object.getId_ciudad());
+            object.setNombre_ciudad(nuevoObjeto.getNombre_ciudad());
+            object.setCantidad_habitantes(nuevoObjeto.getCantidad_habitantes());
+            object.setHotel_reservado(nuevoObjeto.getHotel_reservado());
+            object.setSitio_turístico(nuevoObjeto.getSitio_turístico());
+            
             em.merge(object);
             em.getTransaction().commit();
             ret = true;
@@ -80,6 +85,6 @@ public class CiudadDAO {
             em.close();
             return ret;
         }
-    }*/
+    }
     
 }
