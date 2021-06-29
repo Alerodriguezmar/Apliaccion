@@ -45,10 +45,10 @@ public class CiudadDAO {
         }
     }
 
-    public Ciudad leer(Ciudad par) {
+    public Ciudad Buscar(Ciudad par) {
         EntityManager em = emf.createEntityManager();
         Ciudad ciudad = null;
-        Query q = em.createQuery("SELECT u FROM Ciudad u WHERE u.nombre LIKE :nombre" )
+        Query q = em.createQuery("SELECT u FROM Ciudad u WHERE u.nombre_ciudad LIKE :nombre" )
                     .setParameter("nombre", par.getNombre_ciudad());
         try {
             ciudad = (Ciudad) q.getSingleResult();
