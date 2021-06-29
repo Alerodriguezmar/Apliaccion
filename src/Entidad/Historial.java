@@ -15,7 +15,7 @@ public class Historial  implements Serializable{
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    
+    private int id;
     private String h_id_turista;
     private String h_nombre_turista;
     private String h_nombre_ciudad;

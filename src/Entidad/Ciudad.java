@@ -13,13 +13,15 @@ import javax.persistence.Table;
 
 public class Ciudad implements Serializable{
     
- @Id
- @GeneratedValue(strategy = GenerationType.IDENTITY)
-private int id_ciudad;
-private String Nombre; 
+
+private String nombre_ciudad; 
 private int cantidad_habitantes; 
 private String sitio_turístico;
 private String hotel_reservado; 
+
+ @Id
+ @GeneratedValue(strategy = GenerationType.IDENTITY)
+private int id_ciudad;
 
     public Ciudad() {
     }
@@ -32,12 +34,12 @@ private String hotel_reservado;
         this.id_ciudad = id_ciudad;
     }
 
-    public String getNombre() {
-        return Nombre;
+    public String getNombre_ciudad() {
+        return nombre_ciudad;
     }
 
-    public void setNombre(String Nombre) {
-        this.Nombre = Nombre;
+    public void setNombre_ciudad(String nombre_ciudad) {
+        this.nombre_ciudad = nombre_ciudad;
     }
 
     public int getCantidad_habitantes() {

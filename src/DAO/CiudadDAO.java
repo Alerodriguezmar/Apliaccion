@@ -4,11 +4,12 @@ package DAO;
 import Entidad.Ciudad;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 
 
-public class CiduadDAO {
+public class CiudadDAO {
     
      private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("AplicaPU");
 
@@ -43,24 +44,21 @@ public class CiduadDAO {
             return ret;
         }
     }
-/*
+
     public Ciudad leer(Ciudad par) {
         EntityManager em = emf.createEntityManager();
         Ciudad ciudad = null;
-        Query q = em.createQuery("SELECT u FROM Usuario u " +
-                    "WHERE u.nombre LIKE :nombre" +
-                    " AND u.password LIKE :password")
-                    .setParameter("nombre", par.getNombre())
-                    .setParameter("password", par.getPassword());
+        Query q = em.createQuery("SELECT u FROM Ciudad u WHERE u.nombre LIKE :nombre" )
+                    .setParameter("nombre", par.getNombre_ciudad());
         try {
-            usuario = (Usuario) q.getSingleResult();
+            ciudad = (Ciudad) q.getSingleResult();
         } catch (NonUniqueResultException e) {
-            usuario = (Usuario) q.getResultList().get(0);
+            ciudad = (Ciudad) q.getResultList().get(0);
         } catch (Exception e){
             e.printStackTrace();
         }finally {
             em.close();
-            return usuario;
+            return ciudad;
         }
     }
 /*

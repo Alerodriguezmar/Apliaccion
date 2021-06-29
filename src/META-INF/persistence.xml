@@ -3,8 +3,8 @@
   <persistence-unit name="AplicaPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>Entidad.Ciudad</class>
-    <class>Entidad.Historial</class>
     <class>Entidad.Turista</class>
+    <class>Entidad.Historial</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/Aplica"/>
       <property name="javax.persistence.jdbc.user" value="root"/>
