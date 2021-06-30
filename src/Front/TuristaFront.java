@@ -11,7 +11,6 @@ import DAO.TuristaDAO;
 import Entidad.Ciudad;
 import Entidad.Historial;
 import Entidad.Turista;
-import com.sun.org.apache.bcel.internal.generic.AALOAD;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.time.LocalDate;

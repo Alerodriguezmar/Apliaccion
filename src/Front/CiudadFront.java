@@ -7,11 +7,13 @@ package Front;
 
 import DAO.CiudadDAO;
 import Entidad.Ciudad;
+import ServiciosCiu.ServicioCiudad;
+import ServiciosCiu.ServicioCiudad_Service;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.NonUniqueResultException;
+
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.swing.table.DefaultTableModel;
@@ -19,9 +21,24 @@ import javax.swing.table.DefaultTableModel;
 
 
 public class CiudadFront extends javax.swing.JFrame {
+    
  private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("AplicaPU");
+ //==========
+ //intanciar servicio
+ 
+ ServicioCiudad_Service ws_servicio = new ServicioCiudad_Service();
+ ServiciosCiu.ServicioCiudad sws = ws_servicio.getServicioCiudadPort();
+ 
+ 
+ 
+ 
+
+ 
+ 
  
     public CiudadFront() {
+        
+        
       super("Centrar JFrame");	
       Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
       int height = pantalla.height;
@@ -34,6 +51,8 @@ public class CiudadFront extends javax.swing.JFrame {
         initComponents();
         
         ConsultaDatos();
+        
+        
     }
 
    
@@ -55,6 +74,9 @@ public class CiudadFront extends javax.swing.JFrame {
         Ciudad ciudad = null;
         Query q = em.createQuery("SELECT u FROM Ciudad u" );
         
+        //=================
+        //Datos servicio
+        
         String[] datos = new String[5];
         for (int i = 0; i < q.getResultList().size(); i++) {
                 ciudad = (Ciudad) q.getResultList().get(i);
@@ -63,7 +85,11 @@ public class CiudadFront extends javax.swing.JFrame {
                 datos[1] = ciudad.getNombre_ciudad();
                 datos[3] = ciudad.getHotel_reservado();
                 datos[4] = ciudad.getSitio_turístico();
-                model.addRow(datos);      
+                model.addRow(datos);    
+                //=================
+                //Datos servicio
+                //=================
+                System.out.println("Datos recividos: "+sws.ciudades(ciudad.getNombre_ciudad()));
        }
         TablaCiudades.setModel(model);
 
