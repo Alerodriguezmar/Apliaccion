@@ -65,16 +65,24 @@ public class TuristaDAO {
     
     
     
-/*
 
-    public boolean actualizar(Ciudad object, Ciudad nuevoObjeto) {
+
+    public boolean actualizar( Turista object, Turista  nuevoObjeto) {
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
         boolean ret = false;
         try {
-            object = leer(object);
-            object.setNombre(nuevoObjeto.getNombre());
-            object.setPassword(nuevoObjeto.getPassword());
+            object = Buscar(object);
+            
+            object.setNombre_turista(nuevoObjeto.getNombre_turista());
+            object.setFecha_nacimiento(nuevoObjeto.getFecha_nacimiento());
+            object.setIdentificación(nuevoObjeto.getIdentificación());
+            object.setTipo_identificacion(nuevoObjeto.getTipo_identificacion());
+            object.setPresupuesto_viaje(nuevoObjeto.getPresupuesto_viaje());
+            object.setFrecuencia_viaje(nuevoObjeto.getFrecuencia_viaje());
+            object.setTarjeta_credito(nuevoObjeto.isTarjeta_credito());
+            object.setCiudad(nuevoObjeto.getCiudad());
+            
             em.merge(object);
             em.getTransaction().commit();
             ret = true;
@@ -85,6 +93,6 @@ public class TuristaDAO {
             em.close();
             return ret;
         }
-    }*/
+    }
     
 }

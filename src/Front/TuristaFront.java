@@ -69,7 +69,7 @@ public class TuristaFront extends javax.swing.JFrame {
                 datos[1] = String.valueOf(turista.getFecha_nacimiento());
                 datos[2] = turista.getIdentificación();
                 datos[3] = turista.getTipo_identificacion();
-                datos[4] = String.valueOf(turista.getFrecuencia_viaje());
+                datos[4] = String.valueOf(turista.getPresupuesto_viaje());
                 datos[5] = turista.getCiudad().getNombre_ciudad();   
                 model.addRow(datos);      
        }
@@ -99,8 +99,8 @@ public class TuristaFront extends javax.swing.JFrame {
         presupuesto = new javax.swing.JTextField();
         tarjeta = new javax.swing.JCheckBox();
         agregar = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        Actualizar = new javax.swing.JButton();
+        Eliminar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         datos_tur = new javax.swing.JTable();
         Buscarb = new javax.swing.JButton();
@@ -146,9 +146,19 @@ public class TuristaFront extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setText("Actualizar");
+        Actualizar.setText("Actualizar");
+        Actualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ActualizarActionPerformed(evt);
+            }
+        });
 
-        jButton3.setText("Eliminar");
+        Eliminar.setText("Eliminar");
+        Eliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EliminarActionPerformed(evt);
+            }
+        });
 
         datos_tur.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -191,9 +201,9 @@ public class TuristaFront extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(agregar)
                 .addGap(18, 18, 18)
-                .addComponent(jButton2)
+                .addComponent(Actualizar)
                 .addGap(18, 18, 18)
-                .addComponent(jButton3)
+                .addComponent(Eliminar)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -279,8 +289,8 @@ public class TuristaFront extends javax.swing.JFrame {
                 .addGap(38, 38, 38)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(agregar)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3))
+                    .addComponent(Actualizar)
+                    .addComponent(Eliminar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(Atras, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -331,20 +341,70 @@ public class TuristaFront extends javax.swing.JFrame {
       turista.setCiudad((daociu.Buscar(ciudad)));
       
       dao.crear(turista);
+      llenarDatos();
       
       
     }//GEN-LAST:event_agregarActionPerformed
 
     private void BuscarbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarbActionPerformed
         Turista turista = new Turista();
+        Turista turista2 = new Turista();
         TuristaDAO dao = new TuristaDAO();
         
         turista.setIdentificación(Buscar.getText());
+        turista2 = dao.Buscar(turista);
+        
+      nombre.setText(turista2.getNombre_turista());
+      fecha_naci.setText(turista2.getFecha_nacimiento().toString());
+      identificacion.setText(turista2.getIdentificación());
+      tipo_id.setSelectedItem(turista2.getTipo_identificacion());
+      frecuencia.setText(String.valueOf(turista2.getFrecuencia_viaje()));
+      presupuesto.setText(turista2.getPresupuesto_viaje().toString());
+      tarjeta.setSelected(turista2.isTarjeta_credito());
+      
+        
         
         
         
         
     }//GEN-LAST:event_BuscarbActionPerformed
+
+    private void EliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EliminarActionPerformed
+        Turista turista = new Turista();
+        TuristaDAO dao = new TuristaDAO();
+        turista.setIdentificación(identificacion.getText());
+        
+        dao.eliminar(dao.Buscar(turista));
+        llenarDatos();
+        
+        
+    }//GEN-LAST:event_EliminarActionPerformed
+
+    private void ActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ActualizarActionPerformed
+      Turista turista = new Turista();
+      Turista turista2 = new Turista();
+      TuristaDAO dao = new TuristaDAO();
+      Ciudad ciudad = new  Ciudad();
+      CiudadDAO daociu = new CiudadDAO();
+      ciudad.setNombre_ciudad(jComboBox1.getSelectedItem().toString());
+       turista2.setIdentificación(identificacion.getText());
+      
+      
+      
+      turista.setNombre_turista(nombre.getText());
+      turista.setFecha_nacimiento(LocalDate.parse(fecha_naci.getText()));
+      turista.setIdentificación(identificacion.getText());
+      turista.setTipo_identificacion(tipo_id.getSelectedItem().toString());
+      turista.setFrecuencia_viaje(Integer.valueOf(frecuencia.getText()));
+      turista.setPresupuesto_viaje(Double.valueOf(presupuesto.getText()));
+      turista.setTarjeta_credito(tarjeta.isSelected());
+      turista.setCiudad((daociu.Buscar(ciudad)));
+      
+      dao.actualizar(turista2, turista);
+      llenarDatos();
+        
+        llenarDatos();
+    }//GEN-LAST:event_ActualizarActionPerformed
 
     void llenarCiudad (){
          
@@ -354,9 +414,6 @@ public class TuristaFront extends javax.swing.JFrame {
         for (int i = 0; i < q.getResultList().size(); i++) {
             ciudad = (Ciudad) q.getResultList().get(i);
             jComboBox1.addItem(ciudad.getNombre_ciudad());
-         
-        
-   
         }
           
     }
@@ -396,16 +453,16 @@ public class TuristaFront extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Actualizar;
     private javax.swing.JButton Atras;
     private javax.swing.JTextField Buscar;
     private javax.swing.JButton Buscarb;
+    private javax.swing.JButton Eliminar;
     private javax.swing.JButton agregar;
     private javax.swing.JTable datos_tur;
     private javax.swing.JTextField fecha_naci;
     private javax.swing.JTextField frecuencia;
     private javax.swing.JTextField identificacion;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
