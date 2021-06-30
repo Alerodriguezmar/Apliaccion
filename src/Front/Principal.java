@@ -12,7 +12,7 @@ public class Principal extends javax.swing.JFrame {
       Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
       int height = pantalla.height;
       int width = pantalla.width;
-      setSize(width/2, height/2);		
+      setSize(width/4, height/2);		
 
       setLocationRelativeTo(null);		
       setVisible(true);

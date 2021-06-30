@@ -6,8 +6,10 @@
 package Front;
 
 import DAO.CiudadDAO;
+import DAO.HistorialDAO;
 import DAO.TuristaDAO;
 import Entidad.Ciudad;
+import Entidad.Historial;
 import Entidad.Turista;
 import com.sun.org.apache.bcel.internal.generic.AALOAD;
 import java.awt.Dimension;
@@ -106,6 +108,8 @@ public class TuristaFront extends javax.swing.JFrame {
         Buscarb = new javax.swing.JButton();
         Buscar = new javax.swing.JTextField();
         jComboBox1 = new javax.swing.JComboBox<>();
+        jButton1 = new javax.swing.JButton();
+        Historico = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -189,12 +193,30 @@ public class TuristaFront extends javax.swing.JFrame {
             }
         });
 
+        jButton1.setText("Historial");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        Historico.setText("Historico");
+        Historico.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                HistoricoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(Historico)
+                .addGap(27, 27, 27)
+                .addComponent(jButton1)
+                .addGap(18, 18, 18)
                 .addComponent(Atras)
                 .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -268,13 +290,13 @@ public class TuristaFront extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel4)
-                            .addComponent(tipo_id, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(frecuencia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                            .addComponent(tipo_id, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(19, 19, 19)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(frecuencia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(presupuesto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -292,7 +314,10 @@ public class TuristaFront extends javax.swing.JFrame {
                     .addComponent(Actualizar)
                     .addComponent(Eliminar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(Atras, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Atras, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Historico, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -328,9 +353,11 @@ public class TuristaFront extends javax.swing.JFrame {
       TuristaDAO dao = new TuristaDAO();
       Ciudad ciudad = new  Ciudad();
       CiudadDAO daociu = new CiudadDAO();
+        Historial histo = new Historial();
+        HistorialDAO daoh = new HistorialDAO();
+      
+      
       ciudad.setNombre_ciudad(jComboBox1.getSelectedItem().toString());
-      
-      
       turista.setNombre_turista(nombre.getText());
       turista.setFecha_nacimiento(LocalDate.parse(fecha_naci.getText()));
       turista.setIdentificación(identificacion.getText());
@@ -339,8 +366,17 @@ public class TuristaFront extends javax.swing.JFrame {
       turista.setPresupuesto_viaje(Double.valueOf(presupuesto.getText()));
       turista.setTarjeta_credito(tarjeta.isSelected());
       turista.setCiudad((daociu.Buscar(ciudad)));
-      
       dao.crear(turista);
+      //===================================
+      //LLenar Historial//
+       //===================================
+       histo.setFecha_ingreso(LocalDate.now());
+       histo.setH_id_turista(identificacion.getText());
+       histo.setH_nombre_ciudad(daociu.Buscar(ciudad).getNombre_ciudad());
+       histo.setH_nombre_turista(nombre.getText());
+       daoh.crear(histo);
+      
+      
       llenarDatos();
       
       
@@ -406,6 +442,16 @@ public class TuristaFront extends javax.swing.JFrame {
         llenarDatos();
     }//GEN-LAST:event_ActualizarActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        new HostorialFront().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void HistoricoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HistoricoActionPerformed
+        new HistoricoFront().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_HistoricoActionPerformed
+
     void llenarCiudad (){
          
         EntityManager em = emf.createEntityManager();
@@ -458,11 +504,13 @@ public class TuristaFront extends javax.swing.JFrame {
     private javax.swing.JTextField Buscar;
     private javax.swing.JButton Buscarb;
     private javax.swing.JButton Eliminar;
+    private javax.swing.JButton Historico;
     private javax.swing.JButton agregar;
     private javax.swing.JTable datos_tur;
     private javax.swing.JTextField fecha_naci;
     private javax.swing.JTextField frecuencia;
     private javax.swing.JTextField identificacion;
+    private javax.swing.JButton jButton1;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
