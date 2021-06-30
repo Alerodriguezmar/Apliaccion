@@ -1,11 +1,12 @@
 
 package DAO;
 
-import Entidad.Ciudad;
 import Entidad.Turista;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 
 public class TuristaDAO {
     
@@ -32,7 +33,8 @@ public class TuristaDAO {
         em.getTransaction().begin();
         boolean ret = false;
         try {
-            em.remove(object);
+             Turista current = em.merge(object);
+            em.remove(current);
             em.getTransaction().commit();
             ret = true;
         } catch (Exception e) {
@@ -43,27 +45,28 @@ public class TuristaDAO {
             return ret;
         }
     }
-/*
-    public Ciudad leer(Ciudad par) {
+    
+      public  Turista Buscar(Turista par) {
         EntityManager em = emf.createEntityManager();
-        Ciudad ciudad = null;
-        Query q = em.createQuery("SELECT u FROM Usuario u " +
-                    "WHERE u.nombre LIKE :nombre" +
-                    " AND u.password LIKE :password")
-                    .setParameter("nombre", par.getNombre())
-                    .setParameter("password", par.getPassword());
+        Turista turista = null;
+        Query q = em.createQuery("SELECT u FROM Turista u WHERE u.identificación LIKE :nombre" )
+                    .setParameter("nombre", par.getIdentificación());
         try {
-            usuario = (Usuario) q.getSingleResult();
+            turista = (Turista) q.getSingleResult();
         } catch (NonUniqueResultException e) {
-            usuario = (Usuario) q.getResultList().get(0);
+            turista = (Turista) q.getResultList().get(0);
         } catch (Exception e){
             e.printStackTrace();
         }finally {
             em.close();
-            return usuario;
+            return turista;
         }
     }
+    
+    
+    
 /*
+
     public boolean actualizar(Ciudad object, Ciudad nuevoObjeto) {
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();

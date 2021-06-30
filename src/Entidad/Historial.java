@@ -2,6 +2,7 @@
 package Entidad;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,9 +20,22 @@ public class Historial  implements Serializable{
     private String h_id_turista;
     private String h_nombre_turista;
     private String h_nombre_ciudad;
+    private LocalDate fecha_ingreso;
+    
+    
 
     public Historial() {
     }
+
+    public LocalDate getFecha_ingreso() {
+        return fecha_ingreso;
+    }
+
+    public void setFecha_ingreso(LocalDate fecha_ingreso) {
+        this.fecha_ingreso = fecha_ingreso;
+    }
+    
+    
 
     public String getH_id_turista() {
         return h_id_turista;
